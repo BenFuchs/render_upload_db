@@ -14,18 +14,20 @@ class User(db.Model):
     username = db.Column(db.String(80), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
 
-@app.route("/", methods=['POST'])
+@app.route("/addUser", methods=['POST', 'GET'])
 def addUser():
-    data = request.get_json()
-    username=data.get("username")
-    email=data.get('email')
+    if request.method == "POST":
+        data = request.get_json()
+        username=data.get("username")
+        email=data.get('email')
 
-    newUser = User(username=username, email=email)
-    db.session.add(newUser)
-    db.session.commit()
-    return "user added"
+        newUser = User(username=username, email=email)
+        db.session.add(newUser)
+        db.session.commit()
+        return "user added"
+    return "test"
 
-@app.route("/showuser")
+@app.route("/")
 def showUser():
     user_list=db.session.query(User).all()
     user = [{
